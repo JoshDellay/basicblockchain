@@ -13,7 +13,7 @@ var blockchain 	= new Chain().then((chain) => {
 	rl.setPrompt('Press Enter to mine new block, "b" for balance, "q" to quit.');
 	rl.prompt();
 	rl.on('line', function(line) {
-	  if (line === "n") {
+	  if (line === "q") {
 	  	rl.close()
 	  } else if (line === "b"){
 	  	wallet.getBalance('9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', chain)

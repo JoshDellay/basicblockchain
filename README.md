@@ -7,6 +7,4 @@ Hopes: I dont know, fun times without a real end.
 Possibilities: The new internetz of stuffz with ambiguous smart properites and modular flexibility.
 
 To start:
-git clone http://github.com/joshdellay/basicblockchain.git
-cd basicblockchain
-node index.js 
+git clone http://github.com/joshdellay/basicblockchain.git && cd basicblockchain && node index.js 
