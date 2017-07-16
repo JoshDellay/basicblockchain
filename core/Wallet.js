@@ -1,6 +1,5 @@
 var crypto 	= require('crypto');
 var Address = require('./Address');
-var util 		= require('../util');
 
 module.exports = class Wallet {
 	constructor(config = {}){
