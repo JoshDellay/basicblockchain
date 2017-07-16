@@ -1,35 +1,34 @@
-var crypto 	= require('crypto');
-var miner 	= require('../Miner');
+var crypto 			= require('crypto');
+var Transaction = require('./Transaction');
+var miner 			= require('../Miner');
 
 module.exports = class Block {
-	constructor(prevHash = "0x", txs = []){
+	constructor(prevBlock = {}, txs = []){
 		return new Promise((resolve, reject) => {
 			const hash = crypto.createHash('sha256');
-			
 			this.version = 1;
-			this.prevHash = prevHash;
-			this.height = 0 + 1;
+			this.prevHash = prevBlock.hash || "0x";
+			this.height = prevBlock.height + 1 || 0;
 			this.txs 		= txs;
 			this.merkleRoot; // TODO: implement proper merkle tree
 			this.difficulty = 6;
 			this.nonce = 0;
 			this.timeStamp = Date.now();
+			this.reward = 10;
 
-			if(this.height-1 == 0){
-				let genesisHash = crypto.createHash('sha256');
-				let gensisAddress = crypto.createHash('sha256');
-			
-				let tx = {
-					value: 1000,
-					address: gensisAddress.update('123').digest('hex'),
-					data: 'The start of a new chain...'
-				};
+			if(this.height == 0){
+				console.log('Creating genesis block...');
+				const genesisHash 		= crypto.createHash('sha256');
+				const genesisKey 			= 'test';
+				const genesisAddress 	= genesisHash.update(genesisKey).digest('hex');
 				
-				tx.hash = genesisHash.update(JSON.stringify(tx)).digest('hex');
-				txs.push(tx);
-			} 
-
-			if(miner.getWork(this)){
+				this.reward = 1000;
+				new Transaction(genesisAddress, genesisAddress, this.reward, 0.001).then((tx) => {
+					txs.push(tx);
+					this.hash = hash.update(JSON.stringify(this)).digest('hex');	
+					resolve(this);
+				});
+			} else if(miner.getWork(this)) {
 				this.hash = hash.update(JSON.stringify(this)).digest('hex');	
 				resolve(this);
 			} else {
